@@ -44,7 +44,7 @@ import { RateLimiter } from "limiter";
         // Create a rate limiter to control the number of requests made per second.
         // This limiter allows 8 requests per second.
         const limiter = new RateLimiter({
-          tokensPerInterval: 8,
+          tokensPerInterval: 10,
           interval: "second",
         });
 
