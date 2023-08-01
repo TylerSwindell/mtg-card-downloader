@@ -1,0 +1,29 @@
+{
+  "name": "sample-app",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Tyler Swindell <Tyler.Swindell.Design@gmail.com> (https://tylerswindell.design/)",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "dev": "vitest",
+    "test": "vitest run",
+    "build": "tsup src/index.ts --format cjs,esm --dts; node dist/index.js",
+    "now": "tsup src/index.ts --format cjs,esm --dts; node dist/index.js",
+    "lint": "tsc",
+    "ci": "pnpm run lint && pnpm run test && pnpm run build"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@types/node": "^20.4.1",
+    "csv-parser": "^3.0.0",
+    "limiter": "^2.1.0",
+    "ts-logger-node": "^2.0.6",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.33.0"
+  }
+}
