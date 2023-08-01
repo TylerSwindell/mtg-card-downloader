@@ -62,7 +62,7 @@ import { RateLimiter } from "limiter";
               let cardString: string = JSON.stringify(
                 card["image_uris"]["large"]
               ).replace('"', "");
-              await downloadCardArt(cardString, cardName);
+              await downloadCardArt(cardString, cardName, file);
             } else {
               // If it's a double face card, download both faces' card art.
               const cardStringFront = JSON.stringify(
@@ -71,8 +71,8 @@ import { RateLimiter } from "limiter";
               const cardStringBack = JSON.stringify(
                 card["card_faces"][1]["image_uris"]["large"]
               ).replace('"', "");
-              await downloadCardArt(cardStringFront, cardName + "_front");
-              await downloadCardArt(cardStringBack, cardName + "_back");
+              await downloadCardArt(cardStringFront, cardName + "_front", file);
+              await downloadCardArt(cardStringBack, cardName + "_back", file);
             }
           } catch (err) {
             // If there's an error, log that the card cannot be downloaded.
@@ -89,8 +89,14 @@ import { RateLimiter } from "limiter";
  * @param {string} cardName - The name of the card used for saving the file.
  * @returns {Promise<void>} A promise that resolves after the card art is downloaded and saved.
  */
-async function downloadCardArt(url: string, cardName: string): Promise<void> {
+async function downloadCardArt(
+  url: string,
+  cardName: string,
+  folder: string
+): Promise<void> {
   const response = await fetch(url);
+
+  folder = folder.split(".csv")[0];
 
   const blob = await response.blob();
 
@@ -100,7 +106,9 @@ async function downloadCardArt(url: string, cardName: string): Promise<void> {
 
   const cardDir = "./card_art_downloads";
   if (!fs.existsSync(cardDir)) fs.mkdirSync(cardDir);
-  await promises.writeFile(`${cardDir}/${cardName}.jpg`, buffer);
+  if (!fs.existsSync(cardDir + "/" + folder.split(".csv")))
+    fs.mkdirSync(cardDir + "/" + folder);
+  await promises.writeFile(`${cardDir}/${folder}/${cardName}.jpg`, buffer);
   // Log that the card art has been downloaded.
   Logger.print(cardName + " art downloaded", "GENERAL");
 }
