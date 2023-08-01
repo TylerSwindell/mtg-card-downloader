@@ -37,16 +37,7 @@ Magic: The Gathering Card Downloader is a Node.js project designed to download i
 
 The code is divided into three main functions:
 
-### 1. `downloadCardArt(url: string, cardName: string): Promise<void>`
-
-Asynchronously downloads card art from the provided URL and saves it to a file with the given card name.
-
-**Parameters:**
-
-- `url` (string): The URL of the card art to download.
-- `cardName` (string): The name of the card used for saving the file.
-
-### 2. `fetchCardByName(name: string): Promise<any>`
+### 1. `fetchCardByName(name: string): Promise<any>`
 
 Fetches card details from an external API using the provided card name.
 
@@ -56,6 +47,15 @@ Fetches card details from an external API using the provided card name.
 
 **Returns:**
 A promise that resolves with the fetched card details as an object.
+
+### 2. `downloadCardArt(url: string, cardName: string): Promise<void>`
+
+Asynchronously downloads card art from the provided URL and saves it to a file with the given card name.
+
+**Parameters:**
+
+- `url` (string): The URL of the card art to download.
+- `cardName` (string): The name of the card used for saving the file.
 
 ### 3. `request<TResponse>(url: string, config: RequestInit = {}): Promise<TResponse>`
 
@@ -75,13 +75,12 @@ A promise that resolves with the response data as the specified type.
 
 ### Code Flow
 
-1. The application starts by logging that it is running.
-2. It reads CSV files from the `./card_lists` directory.
-3. For each CSV file, it processes the card names, standardizes them, and stores them in the `cardList` array.
-4. The application creates a rate limiter to control the number of requests made per second. The limiter allows 8 requests per second.
-5. The application iterates over the `cardList` array and fetches card details from an external API using each card name.
-6. If the card has an 'image_uris' property, it is treated as a single face card, and its card art is downloaded and saved.
-7. If the card is a double face card, both faces' card art is downloaded and saved with appropriate naming.
+1. The application reads CSV files from the `./card_lists` directory.
+2. For each CSV file, it processes the card names, standardizes them, and stores them in the `cardList` array.
+3. The application creates a rate limiter to control the number of requests made per second. The limiter allows 10 requests per second.
+4. The application iterates over the `cardList` array and fetches card details from an external API using each card name.
+5. If the card has an 'image_uris' property, it is treated as a single face card, and its card art is downloaded and saved.
+6. If the card is a double face card, both faces' card art is downloaded and saved with appropriate naming.
 
 ## Future Enhancements
 
