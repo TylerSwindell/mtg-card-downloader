@@ -11,7 +11,8 @@ import Logger from "ts-logger-node";
 async function downloadCardArt(
   url: string,
   cardName: string,
-  folder: string
+  folder: string,
+  doubleSided?: boolean
 ): Promise<void> {
   const response = await fetch(url);
 
@@ -24,12 +25,26 @@ async function downloadCardArt(
   const buffer = Buffer.from(arrayBuffer);
 
   const cardDir = "./card_art_downloads";
+  const cardRepoName = folder.split(".csv");
+
   if (!fs.existsSync(cardDir)) fs.mkdirSync(cardDir);
-  if (!fs.existsSync(cardDir + "/" + folder.split(".csv")))
+  if (!fs.existsSync(cardDir)) fs.mkdirSync(cardDir);
+  if (!fs.existsSync(cardDir + "/" + folder)) {
     fs.mkdirSync(cardDir + "/" + folder);
-  await promises.writeFile(`${cardDir}/${folder}/${cardName}.jpg`, buffer);
-  // Log that the card art has been downloaded.
-  Logger.print(cardName + " art downloaded", "GENERAL");
+    fs.mkdirSync(cardDir + "/" + folder + "/" + "single_sided");
+    fs.mkdirSync(cardDir + "/" + folder + "/" + "double_sided");
+  }
+  const saveFolder = doubleSided ? "double_sided" : "single_sided";
+  try {
+    await promises.writeFile(
+      `${cardDir}/${folder}/${saveFolder}/${cardName}.jpg`,
+      buffer
+    );
+    // Log that the card art has been downloaded.
+    Logger.print(cardName + " art downloaded", "GENERAL");
+  } catch (err) {
+    Logger.print(err as string, "ERROR");
+  }
 }
 
 /**

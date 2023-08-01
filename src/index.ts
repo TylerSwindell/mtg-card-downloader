@@ -51,12 +51,18 @@ import { downloadCardArt, fetchCardByName } from "./scryfallAPI";
               );
             } else {
               // If it's a double face card, download both faces' card art.
-              for (let i = 0; i > 1; i++)
-                await downloadCardArt(
-                  parseCardImageURI(card["card_faces"][i]),
-                  cardName + (i === 0) ? "_front" : "_back",
-                  cardListFile
-                );
+              await downloadCardArt(
+                parseCardImageURI(card["card_faces"][0]),
+                cardName + "_front",
+                cardListFile,
+                true
+              );
+              await downloadCardArt(
+                parseCardImageURI(card["card_faces"][1]),
+                cardName + "_back",
+                cardListFile,
+                true
+              );
             }
           } catch (err) {
             // If there's an error, log that the card cannot be downloaded.
